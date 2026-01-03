@@ -8,12 +8,22 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.routes import router as api_router
 from backend.api.websocket import router as ws_router
+from backend.services.agent_service import agent_service
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
     print("🚀 AURA Backend starting...")
+    
+    # Auto-initialize agent on startup
+    print("🔧 Auto-initializing AURA agent...")
+    result = agent_service.initialize()
+    if result["success"]:
+        print(f"✅ {result['message']}")
+    else:
+        print(f"❌ Initialization failed: {result['message']}")
+    
     yield
     print("👋 AURA Backend shutting down...")
 

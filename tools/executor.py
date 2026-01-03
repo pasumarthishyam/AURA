@@ -2,8 +2,8 @@ from tools.registry import ToolRegistry
 from tools.system_tools import OpenBrowserTool, OpenAppTool
 from tools.shell_tools import ShellTool
 from tools.file_tools import ReadFileTool, WriteFileTool
-# NEW: Google Tools
-from tools.google_tools import GoogleSearchTool
+# Search Tools - DuckDuckGo primary with Google fallback
+from tools.google_tools import WebSearchTool, GoogleSearchTool
 
 
 class Executor:
@@ -20,7 +20,9 @@ class Executor:
         self.registry.register(ShellTool())
         self.registry.register(ReadFileTool())
         self.registry.register(WriteFileTool())
-        self.registry.register(GoogleSearchTool())
+        # Search tools - SEARCH_WEB is the new primary
+        self.registry.register(WebSearchTool())
+        self.registry.register(GoogleSearchTool())  # Legacy compatibility
 
     def execute(self, action: dict):
         """

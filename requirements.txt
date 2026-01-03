@@ -8,6 +8,7 @@ pyaudio
 python-dotenv
 watchdog
 googlesearch-python
+ddgs
 pygame
 chromadb
 fastapi

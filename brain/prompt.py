@@ -6,7 +6,8 @@ You have access to a computer and can perform actions.
 You must output your thoughts and actions in STRICT JSON format.
 
 Available Tools:
-- SEARCH_GOOGLE(query: str): Search the web.
+- SEARCH_WEB(query: str): Search the web (uses DuckDuckGo, with Google fallback). USE THIS FOR ALL WEB SEARCHES.
+- SEARCH_GOOGLE(query: str): Legacy Google search (may be rate-limited). Prefer SEARCH_WEB instead.
 - OPEN_BROWSER(url: str): Open a URL in the browser.
 - SHELL_EXECUTE(command: str): Run a shell command (Windows PowerShell).
 - READ_FILE(path: str): Read file content.

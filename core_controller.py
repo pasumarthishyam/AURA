@@ -1,6 +1,34 @@
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 import time
+import json
+import logging
+
+# =========================================================
+# LOGGING CONFIGURATION
+# =========================================================
+
+logger = logging.getLogger("AURA.Controller")
+logger.setLevel(logging.DEBUG)
+
+if not logger.handlers:
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_format = logging.Formatter(
+        '\n%(asctime)s | %(levelname)s | %(name)s\n%(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    console_handler.setFormatter(console_format)
+    logger.addHandler(console_handler)
+
+    file_handler = logging.FileHandler('aura_controller_debug.log', encoding='utf-8')
+    file_handler.setLevel(logging.DEBUG)
+    file_format = logging.Formatter(
+        '%(asctime)s | %(levelname)s | %(name)s | %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(file_format)
+    logger.addHandler(file_handler)
 
 
 # =========================================================
@@ -99,9 +127,17 @@ class CoreAgentController:
         """
         Runs a full autonomous agent session.
         """
+        logger.info(
+            f"{'#'*60}\n"
+            f"  AURA AGENT SESSION STARTED\n"
+            f"{'#'*60}\n"
+            f"GOAL: {user_goal}\n"
+            f"{'#'*60}"
+        )
 
         # ---- Retrieve long-term memory once ----
         memory_context = self.memory.retrieve(user_goal)
+        logger.debug(f"Memory context retrieved: {len(str(memory_context))} chars")
 
         last_observation = None
         last_error = None
@@ -126,6 +162,11 @@ class CoreAgentController:
             # -------------------------------------------------
             # THINK (BRAIN)
             # -------------------------------------------------
+            logger.info(
+                f"\n{'+'+'='*58+'+'}\n"
+                f"| STEP {self.state.step_count} - THINKING...\n"
+                f"{'+'+'='*58+'+'}"
+            )
 
             action = self.brain.next_action(
                 goal=user_goal,
@@ -133,6 +174,18 @@ class CoreAgentController:
                 last_observation=last_observation,
                 last_error=last_error,
                 step_state=self.state,
+            )
+
+            # Log the action decision
+            logger.info(
+                f"\n{'+'+'='*58+'+'}\n"
+                f"| STEP {self.state.step_count} - ACTION DECIDED\n"
+                f"{'+'+'='*58+'+'}\n"
+                f"| TYPE: {action.get('type', 'N/A')}\n"
+                f"| THOUGHT: {action.get('thought', 'N/A')[:200]}{'...' if len(str(action.get('thought', ''))) > 200 else ''}\n"
+                f"| TOOL: {action.get('tool', 'N/A')}\n"
+                f"| ARGS: {json.dumps(action.get('params', {}), indent=2)}\n"
+                f"{'+'+'='*58+'+'}"
             )
 
             # Brain can explicitly stop
@@ -179,10 +232,25 @@ class CoreAgentController:
                 result = self.executor.execute(action)
                 success = True
                 self.state.failure_count = 0  # reset on success
+                logger.info(
+                    f"\n{'+'+'='*58+'+'}\\n"
+                    f"| STEP {self.state.step_count} - EXECUTION SUCCESS [OK]\\n"
+                    f"{'+'+'='*58+'+'}\\n"
+                    f"| RESULT: {str(result)[:500]}{'...' if len(str(result)) > 500 else ''}\\n"
+                    f"{'+'+'='*58+'+'}"
+                )
 
             except Exception as e:
                 error = str(e)
                 self.state.failure_count += 1
+                logger.error(
+                    f"\n{'+'+'='*58+'+'}\\n"
+                    f"| STEP {self.state.step_count} - EXECUTION FAILED [X]\\n"
+                    f"{'+'+'='*58+'+'}\\n"
+                    f"| ERROR: {error}\\n"
+                    f"| FAILURE COUNT: {self.state.failure_count}/{self.state.max_failures}\\n"
+                    f"{'+'+'='*58+'+'}"
+                )
 
             # -------------------------------------------------
             # OBSERVE (PERCEPTION)
@@ -192,6 +260,11 @@ class CoreAgentController:
                 action=action,
                 result=result,
                 error=error,
+            )
+            logger.debug(
+                f"\n{'-'*60}\\n"
+                f"OBSERVATION:\\n{observation}\\n"
+                f"{'-'*60}"
             )
 
             # -------------------------------------------------
