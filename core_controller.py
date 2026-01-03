@@ -44,6 +44,8 @@ class AgentState:
     failure_count: int = 0
     max_steps: int = 15
     max_failures: int = 4
+    # Track last actions for loop detection
+    last_actions: List[Dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
@@ -203,6 +205,17 @@ class CoreAgentController:
                 )
 
             # -------------------------------------------------
+            # LOOP DETECTION - Prevent infinite repeated actions
+            # -------------------------------------------------
+            if self._is_repeated_action(action):
+                logger.warning(
+                    f"\n{'!'*60}\n"
+                    f"LOOP DETECTED: Same action repeated. Force-stopping.\n"
+                    f"{'!'*60}"
+                )
+                return self._smart_terminate(action)
+
+            # -------------------------------------------------
             # SAFETY CHECK
             # -------------------------------------------------
 
@@ -313,6 +326,68 @@ class CoreAgentController:
         """
         return AgentResult(
             success=success,
+            message=message,
+            trace=self.trace,
+        )
+
+    # =====================================================
+    # LOOP DETECTION HELPERS
+    # =====================================================
+
+    def _is_repeated_action(self, action: Dict[str, Any]) -> bool:
+        """
+        Check if the current action is identical to the last one.
+        Returns True if loop detected (same action repeated).
+        """
+        if action.get("type") != "ACTION":
+            return False
+        
+        # Create a comparable representation of the action
+        action_signature = {
+            "tool": action.get("tool"),
+            "params": action.get("params", {})
+        }
+        
+        # Check against last action
+        if self.state.last_actions:
+            last_signature = self.state.last_actions[-1]
+            if action_signature == last_signature:
+                return True
+        
+        # Store current action (keep last 3)
+        self.state.last_actions.append(action_signature)
+        if len(self.state.last_actions) > 3:
+            self.state.last_actions.pop(0)
+        
+        return False
+
+    def _smart_terminate(self, action: Dict[str, Any]) -> AgentResult:
+        """
+        Intelligent termination for completed tasks.
+        Provides helpful messages based on the action type.
+        """
+        tool = action.get("tool", "")
+        params = action.get("params", {})
+        
+        # Special handling for file operations
+        if tool in ["WRITE_FILE", "WRITE_AND_OPEN"]:
+            path = params.get("path", "unknown")
+            message = (
+                f"✅ File saved successfully!\n\n"
+                f"📁 **Location:** `{path}`\n\n"
+                f"The file has been created with your content."
+            )
+        elif tool == "READ_FILE":
+            path = params.get("path", "unknown")
+            message = f"📄 File read from: {path}"
+        elif tool == "SHELL_EXECUTE":
+            command = params.get("command", "")
+            message = f"⚡ Command executed: {command}"
+        else:
+            message = "✅ Task completed successfully."
+        
+        return AgentResult(
+            success=True,
             message=message,
             trace=self.trace,
         )

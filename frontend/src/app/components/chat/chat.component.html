@@ -9,37 +9,44 @@
     <div class="messages-wrapper">
         @if (messages().length === 0) {
         <div class="empty-state">
-            <div class="empty-icon">
-                <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                    <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
-                    <circle cx="32" cy="32" r="12" fill="currentColor" opacity="0.3" />
-                </svg>
+            <div class="empty-hero">
+                <div class="aura-logo">
+                    <span class="logo-glow"></span>
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" />
+                        <circle cx="32" cy="32" r="12" fill="currentColor" opacity="0.8" />
+                    </svg>
+                </div>
+                <h2>What can I help you with?</h2>
+                <p>Ask anything. I'm here to assist.</p>
             </div>
-            <h3>Welcome to AURA</h3>
-            <p>Your AI assistant is ready. Start a conversation to begin.</p>
+
+            <!-- Suggestion Chips -->
+            <div class="suggestions">
+                <button class="suggestion-chip" (click)="sendSuggestion('Explain quantum computing')">Explain quantum
+                    computing</button>
+                <button class="suggestion-chip" (click)="sendSuggestion('Write a Python script')">Write a Python
+                    script</button>
+                <button class="suggestion-chip" (click)="sendSuggestion('Brainstorm ideas')">Brainstorm ideas</button>
+            </div>
         </div>
         } @else {
         @for (message of messages(); track message.id) {
-        <div class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
-            <div class="message-avatar">
-                @if (message.role === 'user') {
-                <mat-icon>person</mat-icon>
-                } @else {
-                <div class="ai-avatar">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
-                        <circle cx="10" cy="10" r="3" fill="currentColor" />
-                    </svg>
-                </div>
-                }
-            </div>
+        <div class="message" [class.message-user]="message.role === 'user'"
+            [class.message-ai]="message.role === 'assistant'">
             <div class="message-content">
-                <div class="message-header">
-                    <span class="message-role">{{ message.role === 'user' ? 'You' : 'AURA' }}</span>
-                    <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
-                </div>
-                <div class="message-text">{{ message.content }}</div>
-                @if (message.role === 'assistant' && !message.success) {
+                <p class="message-text">
+                    <!-- Use displayContent for typewriter effect -->
+                    {{ message.displayContent || message.content }}
+                    <!-- Typing cursor -->
+                    @if (message.isStreaming) {
+                    <span class="typing-cursor"></span>
+                    }
+                </p>
+                @if (!message.isStreaming) {
+                <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+                }
+                @if (message.role === 'assistant' && !message.success && !message.isStreaming) {
                 <div class="message-status error">
                     <mat-icon>error</mat-icon>
                     <span>Task completed with issues</span>
@@ -52,15 +59,7 @@
 
         <!-- Thinking Indicator -->
         @if (isThinking()) {
-        <div class="message assistant thinking">
-            <div class="message-avatar">
-                <div class="ai-avatar thinking-glow">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
-                        <circle cx="10" cy="10" r="3" fill="currentColor" />
-                    </svg>
-                </div>
-            </div>
+        <div class="message message-ai thinking">
             <div class="message-content">
                 <div class="thinking-indicator">
                     <div class="loading-pulse">

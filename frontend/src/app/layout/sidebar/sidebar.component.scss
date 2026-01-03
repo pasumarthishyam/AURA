@@ -3,19 +3,23 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background: rgba(24, 24, 27, 0.8);
-    backdrop-filter: blur(20px);
-    border-right: 1px solid var(--border-default);
+    background: linear-gradient(180deg,
+            rgba(20, 20, 21, 0.95) 0%,
+            rgba(10, 10, 11, 0.98) 100%);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-right: 1px solid var(--glass-border);
     position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
 }
 
+// ==========================================
 // Header / Logo
+// ==========================================
 .sidebar-header {
     padding: var(--space-lg);
-    border-bottom: 1px solid var(--border-default);
 }
 
 .logo {
@@ -31,7 +35,7 @@
     .logo-glow {
         position: absolute;
         inset: -8px;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+        background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
         border-radius: 50%;
         animation: pulse-glow 2s ease-in-out infinite;
     }
@@ -43,9 +47,9 @@
 }
 
 .logo-text {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.05em;
     background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -66,21 +70,23 @@
     }
 }
 
-// Navigation
+// ==========================================
+// Navigation - Text Only, Clean
+// ==========================================
 .sidebar-nav {
     flex: 1;
-    padding: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: 4px;
     overflow-y: auto;
 }
 
 .nav-item {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-sm) var(--space-md);
+    padding: 10px 14px;
     background: transparent;
     border: none;
     border-radius: var(--radius-md);
@@ -88,51 +94,97 @@
     cursor: pointer;
     transition: all var(--transition-fast);
     text-align: left;
-    font-size: 0.875rem;
-    font-weight: 500;
-
-    mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-    }
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
 
     &:hover {
-        background: var(--bg-hover);
+        background: var(--glass-bg-hover);
         color: var(--text-primary);
     }
 
     &.active {
-        background: rgba(99, 102, 241, 0.15);
-        color: var(--accent-primary);
+        background: var(--accent-subtle);
+        color: var(--text-primary);
 
         &::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 24px;
+            top: 25%;
+            height: 50%;
+            width: 2px;
             background: var(--accent-primary);
             border-radius: 0 2px 2px 0;
         }
     }
 }
 
-// Footer / Status
+// ==========================================
+// Footer - Ultra Minimal
+// ==========================================
 .sidebar-footer {
-    padding: var(--space-lg);
-    border-top: 1px solid var(--border-default);
+    padding: var(--space-md) var(--space-lg) var(--space-lg);
 }
 
 // ==========================================
-// INIT ERROR DISPLAY - CRITICAL FOR VISIBILITY
+// Status Card - Aesthetic Design
+// ==========================================
+.status-card {
+    padding: 10px 14px;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.02) 0%,
+            rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-md);
+    transition: all var(--transition-normal);
+
+    &.online {
+        border-color: rgba(52, 211, 153, 0.2);
+        background: linear-gradient(135deg,
+                rgba(52, 211, 153, 0.05) 0%,
+                rgba(52, 211, 153, 0.02) 100%);
+
+        .status-indicator {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+        }
+    }
+
+    .status-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .status-indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--text-tertiary);
+        flex-shrink: 0;
+        transition: all var(--transition-fast);
+    }
+
+    .status-label {
+        font-size: var(--text-xs);
+        font-weight: var(--font-medium);
+        color: var(--text-tertiary);
+        letter-spacing: 0.02em;
+    }
+}
+
+// ==========================================
+// Error Display
 // ==========================================
 .init-error {
-    background: #FEF2F2; // Light red - READABLE!
-    border: 1px solid #FCA5A5;
-    border-radius: var(--radius-md);
+    background: var(--error-bg);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    border-radius: var(--radius-lg);
     padding: var(--space-md);
     margin-bottom: var(--space-md);
 
@@ -140,9 +192,9 @@
         display: flex;
         align-items: center;
         gap: var(--space-xs);
-        color: #991B1B;
-        font-weight: 600;
-        font-size: 0.75rem;
+        color: var(--error-text);
+        font-weight: var(--font-semibold);
+        font-size: var(--text-xs);
         margin-bottom: var(--space-sm);
 
         mat-icon {
@@ -161,8 +213,9 @@
         border: none;
         padding: 2px;
         cursor: pointer;
-        color: #991B1B;
+        color: var(--error-text);
         display: flex;
+        transition: all var(--transition-fast);
 
         mat-icon {
             font-size: 14px;
@@ -178,7 +231,7 @@
 
     .init-error-message {
         color: #7F1D1D;
-        font-size: 0.75rem;
+        font-size: var(--text-xs);
         line-height: 1.4;
         margin-bottom: var(--space-sm);
         word-break: break-word;
@@ -209,69 +262,78 @@
             background: rgba(0, 0, 0, 0.1);
             padding: 1px 4px;
             border-radius: 2px;
-            font-family: 'Consolas', monospace;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
         }
     }
 }
 
-.system-status {
-    margin-bottom: var(--space-lg);
-}
-
-.status-header {
-    margin-bottom: var(--space-md);
-}
-
-.status-label {
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-}
-
-.status-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-xs) 0;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-
-    .status-value {
-        margin-left: auto;
-        color: var(--text-primary);
-        font-weight: 500;
-    }
-}
-
-.status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--error);
-
-    &.online {
-        background: var(--success);
-        box-shadow: 0 0 8px var(--success);
-    }
-}
-
-.status-icon {
-    font-size: 16px !important;
-    width: 16px !important;
-    height: 16px !important;
-    color: var(--text-muted);
-}
-
+// ==========================================
+// Initialize Button
+// ==========================================
 .init-btn {
     width: 100%;
-    padding: var(--space-md);
-    font-size: 0.875rem;
+    padding: 10px var(--space-md);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    transition: all var(--transition-fast);
 
-    mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+    &:hover:not(:disabled) {
+        background: var(--accent-primary-hover);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-glow);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.loading-pulse {
+    display: flex;
+    gap: 3px;
+
+    span {
+        width: 4px;
+        height: 4px;
+        background: currentColor;
+        border-radius: 50%;
+        animation: pulse 1.4s ease-in-out infinite both;
+
+        &:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
     }
 }

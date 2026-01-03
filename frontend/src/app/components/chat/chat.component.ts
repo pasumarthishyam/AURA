@@ -21,4 +21,12 @@ export class ChatComponent {
   clearError() {
     this.chatService.clearError();
   }
+
+  /**
+   * Send a suggestion chip as a message
+   */
+  sendSuggestion(suggestion: string) {
+    this.chatService.sendMessage(suggestion);
+  }
 }
+
