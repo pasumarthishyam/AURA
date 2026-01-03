@@ -1,0 +1,23 @@
+<div class="input-container" [class.disabled]="!isInitialized()">
+    <div class="input-wrapper">
+        <input type="text" class="message-input"
+            [placeholder]="isInitialized() ? 'Message AURA...' : 'Initialize system to begin...'"
+            [disabled]="!isInitialized() || isThinking()" [value]="message()"
+            (input)="message.set($any($event.target).value)" (keydown)="onKeydown($event)" />
+
+        <button class="send-btn" [disabled]="!isInitialized() || isThinking() || !message().trim()"
+            (click)="sendMessage()">
+            @if (isThinking()) {
+            <div class="loading-pulse small">
+                <span></span><span></span><span></span>
+            </div>
+            } @else {
+            <mat-icon>send</mat-icon>
+            }
+        </button>
+    </div>
+
+    <div class="input-hint">
+        <span>Press <kbd>Enter</kbd> to send</span>
+    </div>
+</div>

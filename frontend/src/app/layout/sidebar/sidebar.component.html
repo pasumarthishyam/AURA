@@ -1,0 +1,82 @@
+<aside class="sidebar">
+  <!-- Logo -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">
+        <span class="logo-glow"></span>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" />
+          <circle cx="16" cy="16" r="6" fill="currentColor" />
+        </svg>
+      </div>
+      <span class="logo-text">AURA</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    @for (item of navItems; track item.label) {
+    <button class="nav-item" [class.active]="item.active" [matTooltip]="item.label" matTooltipPosition="right">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span class="nav-label">{{ item.label }}</span>
+    </button>
+    }
+  </nav>
+
+  <!-- System Status -->
+  <div class="sidebar-footer">
+    <!-- ERROR DISPLAY - Visible when initialization fails -->
+    @if (initError()) {
+    <div class="init-error">
+      <div class="init-error-header">
+        <mat-icon>error</mat-icon>
+        <span>Initialization Failed</span>
+        <button class="error-close" (click)="dismissError()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <p class="init-error-message">{{ initError() }}</p>
+      <div class="init-error-hint">
+        <strong>How to fix:</strong>
+        <ol>
+          <li>Create a <code>.env</code> file in the project root</li>
+          <li>Add: <code>GOOGLE_API_KEY=your_key_here</code></li>
+          <li>Restart the backend server</li>
+        </ol>
+      </div>
+    </div>
+    }
+
+    <div class="system-status">
+      <div class="status-header">
+        <span class="status-label">SYSTEM</span>
+      </div>
+
+      <div class="status-item">
+        <div class="status-indicator" [class.online]="isInitialized()"></div>
+        <span>Status</span>
+        <span class="status-value">{{ isInitialized() ? 'Online' : 'Offline' }}</span>
+      </div>
+
+      <div class="status-item">
+        <mat-icon class="status-icon">memory</mat-icon>
+        <span>GPU</span>
+        <span class="status-value">RTX 3050</span>
+      </div>
+    </div>
+
+    @if (!isInitialized()) {
+    <button class="btn btn-primary init-btn" (click)="initializeAgent()" [disabled]="isLoading()">
+      @if (isLoading()) {
+      <div class="loading-pulse">
+        <span></span><span></span><span></span>
+      </div>
+      Initializing...
+      } @else {
+      <mat-icon>power_settings_new</mat-icon>
+      Initialize System
+      }
+    </button>
+    }
+  </div>
+</aside>

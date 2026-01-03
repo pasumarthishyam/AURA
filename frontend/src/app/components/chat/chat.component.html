@@ -1,0 +1,75 @@
+<div class="chat-container">
+    <!-- Error Display (if any) -->
+    @if (error()) {
+    <app-error-display [error]="error()!" (dismiss)="clearError()">
+    </app-error-display>
+    }
+
+    <!-- Messages -->
+    <div class="messages-wrapper">
+        @if (messages().length === 0) {
+        <div class="empty-state">
+            <div class="empty-icon">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
+                    <circle cx="32" cy="32" r="12" fill="currentColor" opacity="0.3" />
+                </svg>
+            </div>
+            <h3>Welcome to AURA</h3>
+            <p>Your AI assistant is ready. Start a conversation to begin.</p>
+        </div>
+        } @else {
+        @for (message of messages(); track message.id) {
+        <div class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
+            <div class="message-avatar">
+                @if (message.role === 'user') {
+                <mat-icon>person</mat-icon>
+                } @else {
+                <div class="ai-avatar">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
+                        <circle cx="10" cy="10" r="3" fill="currentColor" />
+                    </svg>
+                </div>
+                }
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-role">{{ message.role === 'user' ? 'You' : 'AURA' }}</span>
+                    <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+                </div>
+                <div class="message-text">{{ message.content }}</div>
+                @if (message.role === 'assistant' && !message.success) {
+                <div class="message-status error">
+                    <mat-icon>error</mat-icon>
+                    <span>Task completed with issues</span>
+                </div>
+                }
+            </div>
+        </div>
+        }
+        }
+
+        <!-- Thinking Indicator -->
+        @if (isThinking()) {
+        <div class="message assistant thinking">
+            <div class="message-avatar">
+                <div class="ai-avatar thinking-glow">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
+                        <circle cx="10" cy="10" r="3" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+            <div class="message-content">
+                <div class="thinking-indicator">
+                    <div class="loading-pulse">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="thinking-text">Thinking...</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

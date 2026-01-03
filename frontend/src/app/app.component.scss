@@ -1,0 +1,48 @@
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-base);
+}
+
+.main-header {
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid var(--border-default);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+
+    h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        letter-spacing: 0.05em;
+    }
+}
+
+// Make chat take remaining space
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+app-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+app-message-input {
+    flex-shrink: 0;
+}

@@ -1,0 +1,130 @@
+// CRITICAL: Error display uses LIGHT background for readability!
+.error-container {
+    background: #FECACA; // Light red - readable!
+    border: 1px solid var(--error);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin: var(--space-lg);
+}
+
+.error-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.error-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: #991B1B; // Dark red text - readable!
+    font-weight: 600;
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.btn-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: #991B1B;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+
+    &:hover {
+        background: rgba(153, 27, 27, 0.1);
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.error-message {
+    color: #991B1B;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+
+.trace-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background: transparent;
+    border: none;
+    color: #991B1B;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: var(--space-sm);
+
+    mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.error-trace {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.75rem;
+    color: #7F1D1D;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-bottom: var(--space-md);
+}
+
+.error-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+
+    button {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        padding: var(--space-xs) var(--space-md);
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: white;
+        color: #991B1B;
+        border: 1px solid #F87171;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+
+        mat-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
+        }
+
+        &:hover {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+    }
+}

@@ -10,3 +10,7 @@ watchdog
 googlesearch-python
 pygame
 chromadb
+fastapi
+uvicorn[standard]
+websockets
+pydantic
