@@ -95,3 +95,22 @@ class VoiceEngine:
             os.startfile(file_path)
         except Exception as e:
             print(f"Error playing audio: {e}")
+
+    def observe(self, action: dict, result, error: str = None) -> str:
+        """
+        Creates a textual observation from the action result.
+        Required by CoreAgentController.
+        """
+        if error:
+            return f"Action failed with error: {error}"
+        
+        if result is None:
+            return "Action completed with no output."
+        
+        # Truncate long results
+        result_str = str(result)
+        if len(result_str) > 500:
+            result_str = result_str[:500] + "... (truncated)"
+        
+        return f"Action completed. Result: {result_str}"
+

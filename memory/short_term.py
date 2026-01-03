@@ -19,4 +19,3 @@ class ShortTermMemory:
 
     def reset(self):
         self.buffer = []
-       """ Coordinates all components to achieve the user-defined goal."""

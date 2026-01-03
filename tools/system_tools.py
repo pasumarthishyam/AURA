@@ -5,7 +5,7 @@ from tools.base_tool import BaseTool
 
 
 class OpenBrowserTool(BaseTool):
-    name = "open_browser"
+    name = "OPEN_BROWSER"
 
     def run(self, url: str):
         webbrowser.open(url)
@@ -13,7 +13,7 @@ class OpenBrowserTool(BaseTool):
 
 
 class OpenAppTool(BaseTool):
-    name = "open_app"
+    name = "OPEN_APP"
 
     def run(self, name: str):
         try:

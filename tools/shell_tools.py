@@ -3,7 +3,7 @@ from tools.base_tool import BaseTool
 
 
 class ShellTool(BaseTool):
-    name = "run_shell"
+    name = "SHELL_EXECUTE"
 
     def run(self, command: str):
         process = subprocess.run(

@@ -142,6 +142,13 @@ class CoreAgentController:
                     message=action.get("message", "Task completed."),
                 )
 
+            # Brain can just respond (no action needed)
+            if action["type"] == "RESPONSE":
+                return self._terminate(
+                    success=True,
+                    message=action.get("message", "I don't have a response."),
+                )
+
             # -------------------------------------------------
             # SAFETY CHECK
             # -------------------------------------------------

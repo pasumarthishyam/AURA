@@ -2,7 +2,7 @@ from tools.base_tool import BaseTool
 
 
 class ReadFileTool(BaseTool):
-    name = "read_file"
+    name = "READ_FILE"
 
     def run(self, path: str):
         with open(path, "r", encoding="utf-8") as f:
@@ -10,7 +10,7 @@ class ReadFileTool(BaseTool):
 
 
 class WriteFileTool(BaseTool):
-    name = "write_file"
+    name = "WRITE_FILE"
 
     def run(self, path: str, content: str):
         with open(path, "w", encoding="utf-8") as f:

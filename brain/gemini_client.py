@@ -6,7 +6,7 @@ class GeminiClient:
     """
     Wrapper for Google's Gemini API to serve as the agent's brain.
     """
-    def __init__(self, model_name: str = "gemini-1.5-flash", api_key: Optional[str] = None):
+    def __init__(self, model_name: str = "gemini-2.5-flash", api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("Google API Key not found. Please set GOOGLE_API_KEY environment variable.")
@@ -20,7 +20,7 @@ class GeminiClient:
                 top_p=0.95,
                 top_k=64,
                 max_output_tokens=8192,
-                response_mime_type="application/json",
+                # response_mime_type removed for SDK compatibility
             )
         )
         self.chat_session = None

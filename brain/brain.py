@@ -48,10 +48,12 @@ Respond with JSON only.
 """
 
         raw_output = self.llm.generate_response(prompt)
+        print(f"[DEBUG] Gemini raw output: {raw_output[:200]}...")
         
         # --- Clean Markdown Fencing ---
         # Gemini often supports "```json ... ```"
         clean_output = self._clean_json(raw_output)
+        print(f"[DEBUG] Cleaned output: {clean_output[:200]}...")
 
         # --- Strict JSON enforcement ---
         try:
