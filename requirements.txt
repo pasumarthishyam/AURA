@@ -1,0 +1,11 @@
+google-generativeai
+streamlit
+faster-whisper
+edge-tts
+sounddevice
+numpy
+pyaudio
+python-dotenv
+watchdog
+googlesearch-python
+pygame
