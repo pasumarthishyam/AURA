@@ -183,15 +183,21 @@ class AgentService:
             }
     
     def get_status(self) -> dict:
-        """Get current system status including LLM provider."""
+        """Get current system status including LLM provider and offline mode."""
+        from core.offline_state import OfflineState
+        
         llm_provider = None
         if self._brain:
             llm_provider = self._brain.get_provider_name()
+        
+        offline_status = OfflineState.get_status()
             
         return {
             "initialized": self._initialized,
             "gpu": "NVIDIA RTX 3050" if self._initialized else "Not active",
-            "llm_provider": llm_provider
+            "llm_provider": llm_provider,
+            "offline_mode": offline_status["offline_mode"],
+            "network_available": offline_status["network_available"]
         }
 
 

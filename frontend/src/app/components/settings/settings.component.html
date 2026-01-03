@@ -1,13 +1,13 @@
 <!-- Settings Toggle Button -->
-<button class="settings-toggle" (click)="toggle()" [class.active]="isOpen()">
-    <span class="icon">⚙️</span>
-    <span class="provider-badge">{{ api.currentProvider() | uppercase }}</span>
+<button class="settings-toggle" (click)="toggle()" [class.active]="isOpen()" [class.offline]="api.offlineMode()">
+    <span class="icon">{{ api.offlineMode() ? '📴' : '⚙️' }}</span>
+    <span class="provider-badge">{{ api.offlineMode() ? 'OFFLINE' : (api.currentProvider() | uppercase) }}</span>
 </button>
 
 <!-- Settings Panel -->
 <div class="settings-panel" [class.open]="isOpen()">
     <div class="panel-header">
-        <h3>LLM Provider</h3>
+        <h3>Settings</h3>
         <button class="close-btn" (click)="close()">✕</button>
     </div>
 
@@ -19,37 +19,69 @@
         </div>
         }
 
-        <!-- Provider Options -->
-        <div class="provider-list">
-            @for (provider of api.availableProviders(); track provider) {
-            <button class="provider-option" [class.selected]="provider === api.currentProvider()"
-                [class.unhealthy]="providerHealth()[provider] === false" [disabled]="isLoading()"
-                (click)="selectProvider(provider)">
-                <span class="provider-icon">{{ getProviderIcon(provider) }}</span>
-                <span class="provider-info">
-                    <span class="provider-name">{{ getProviderLabel(provider) }}</span>
-                    <span class="provider-status">
-                        @if (providerHealth()[provider] === true) {
-                        <span class="health-dot healthy"></span> Available
-                        } @else if (providerHealth()[provider] === false) {
-                        <span class="health-dot unhealthy"></span> Unavailable
-                        } @else {
-                        <span class="health-dot unknown"></span> Unknown
-                        }
-                    </span>
+        <!-- Offline Mode Section -->
+        <div class="settings-section offline-section">
+            <div class="section-header">
+                <h4>📴 Offline Mode</h4>
+                <span class="network-indicator" [class.online]="api.networkAvailable()"
+                    [class.offline]="!api.networkAvailable()">
+                    {{ api.networkAvailable() ? '🟢 Online' : '🔴 No Internet' }}
                 </span>
-                @if (provider === api.currentProvider()) {
-                <span class="check-mark">✓</span>
-                }
+            </div>
+
+            <p class="section-description">
+                Works without internet using local AI. Perfect for low-connectivity areas.
+            </p>
+
+            <button class="offline-toggle" [class.active]="api.offlineMode()" [disabled]="isLoading()"
+                (click)="toggleOfflineMode()">
+                <span class="toggle-icon">{{ api.offlineMode() ? '📴' : '🌐' }}</span>
+                <span class="toggle-label">{{ api.offlineMode() ? 'Offline Mode ON' : 'Online Mode' }}</span>
             </button>
+
+            @if (api.offlineMode()) {
+            <div class="offline-info">
+                <strong>✅ Available:</strong> Q&A, education, writing, coding, file operations
+            </div>
             }
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- LLM Provider Section -->
+        <div class="settings-section">
+            <h4>🤖 LLM Provider</h4>
+            <div class="provider-list">
+                @for (provider of api.availableProviders(); track provider) {
+                <button class="provider-option" [class.selected]="provider === api.currentProvider()"
+                    [class.unhealthy]="providerHealth()[provider] === false" [disabled]="isLoading()"
+                    (click)="selectProvider(provider)">
+                    <span class="provider-icon">{{ getProviderIcon(provider) }}</span>
+                    <span class="provider-info">
+                        <span class="provider-name">{{ getProviderLabel(provider) }}</span>
+                        <span class="provider-status">
+                            @if (providerHealth()[provider] === true) {
+                            <span class="health-dot healthy"></span> Available
+                            } @else if (providerHealth()[provider] === false) {
+                            <span class="health-dot unhealthy"></span> Unavailable
+                            } @else {
+                            <span class="health-dot unknown"></span> Unknown
+                            }
+                        </span>
+                    </span>
+                    @if (provider === api.currentProvider()) {
+                    <span class="check-mark">✓</span>
+                    }
+                </button>
+                }
+            </div>
         </div>
 
         <!-- Loading Indicator -->
         @if (isLoading()) {
         <div class="loading-overlay">
             <span class="spinner"></span>
-            Switching provider...
+            Processing...
         </div>
         }
     </div>

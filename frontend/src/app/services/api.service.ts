@@ -31,6 +31,8 @@ export interface StatusResponse {
     initialized: boolean;
     gpu: string;
     llm_provider: string | null;
+    offline_mode?: boolean;
+    network_available?: boolean;
 }
 
 export interface SetProviderResponse {
@@ -52,6 +54,13 @@ export interface LLMStatusResponse {
     available: string[];
 }
 
+export interface OfflineStatusResponse {
+    offline_mode: boolean;
+    manual_offline: boolean;
+    auto_detect: boolean;
+    network_available: boolean;
+}
+
 // =========================================================
 // API Service
 // =========================================================
@@ -67,6 +76,10 @@ export class ApiService {
     gpuStatus = signal('Not active');
     currentProvider = signal<string>('ollama');
     availableProviders = signal<string[]>(['ollama', 'gemini']);
+
+    // Offline mode signals
+    offlineMode = signal(false);
+    networkAvailable = signal(true);
 
     constructor(private http: HttpClient) {
         this.checkStatus();
@@ -85,6 +98,13 @@ export class ApiService {
             this.gpuStatus.set(response.gpu);
             if (response.llm_provider) {
                 this.currentProvider.set(response.llm_provider);
+            }
+            // Update offline status
+            if (response.offline_mode !== undefined) {
+                this.offlineMode.set(response.offline_mode);
+            }
+            if (response.network_available !== undefined) {
+                this.networkAvailable.set(response.network_available);
             }
             return response;
         } catch (error) {
@@ -169,6 +189,48 @@ export class ApiService {
                 current_provider: null,
                 providers: {},
                 available: []
+            };
+        }
+    }
+
+    // =========================================================
+    // Offline Mode
+    // =========================================================
+
+    async setOfflineMode(enabled: boolean): Promise<OfflineStatusResponse> {
+        try {
+            const response = await firstValueFrom(
+                this.http.post<OfflineStatusResponse>(`${this.baseUrl}/offline/mode`, { enabled })
+            );
+            this.offlineMode.set(response.offline_mode);
+            this.networkAvailable.set(response.network_available);
+            return response;
+        } catch (error) {
+            console.error('Failed to set offline mode:', error);
+            return {
+                offline_mode: this.offlineMode(),
+                manual_offline: false,
+                auto_detect: true,
+                network_available: this.networkAvailable()
+            };
+        }
+    }
+
+    async getOfflineStatus(): Promise<OfflineStatusResponse> {
+        try {
+            const response = await firstValueFrom(
+                this.http.get<OfflineStatusResponse>(`${this.baseUrl}/offline/status`)
+            );
+            this.offlineMode.set(response.offline_mode);
+            this.networkAvailable.set(response.network_available);
+            return response;
+        } catch (error) {
+            console.error('Failed to get offline status:', error);
+            return {
+                offline_mode: false,
+                manual_offline: false,
+                auto_detect: true,
+                network_available: true
             };
         }
     }

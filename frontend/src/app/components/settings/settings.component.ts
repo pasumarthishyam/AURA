@@ -63,6 +63,42 @@ export class SettingsComponent implements OnInit {
         }
     }
 
+    async toggleOfflineMode() {
+        const currentState = this.api.offlineMode();
+        const newState = !currentState;
+        this.isLoading.set(true);
+        this.statusMessage.set(null);
+
+        try {
+            const result = await this.api.setOfflineMode(newState);
+
+            // Check if manual_offline was set correctly (that's what we control)
+            // The actual offline_mode might differ if auto-detect kicks in
+            if (result.manual_offline === newState) {
+                this.statusMessage.set(
+                    newState
+                        ? '📴 Offline Mode Enabled - AI works without internet!'
+                        : '🌐 Online Mode - Full features available'
+                );
+            } else if (result.offline_mode !== currentState) {
+                // Mode changed somehow, show appropriate message
+                this.statusMessage.set(
+                    result.offline_mode
+                        ? '📴 Offline Mode Active'
+                        : '🌐 Online Mode Active'
+                );
+            } else {
+                this.statusMessage.set('Mode updated');
+            }
+        } catch (error) {
+            console.error('Toggle offline mode error:', error);
+            this.statusMessage.set('Error: Failed to change mode');
+        }
+
+        this.isLoading.set(false);
+        setTimeout(() => this.statusMessage.set(null), 3000);
+    }
+
     getProviderIcon(provider: string): string {
         const icons: { [key: string]: string } = {
             'ollama': '🦙',

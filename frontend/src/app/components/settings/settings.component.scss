@@ -232,3 +232,133 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 999;
 }
+
+// =========================================================
+// Offline Mode Styles
+// =========================================================
+
+.settings-toggle.offline {
+    background: rgba(249, 115, 22, 0.3);
+    border-color: #f97316;
+
+    .provider-badge {
+        background: rgba(249, 115, 22, 0.6);
+    }
+}
+
+.settings-section {
+    margin-bottom: 16px;
+
+    h4 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+    }
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    h4 {
+        margin: 0;
+    }
+}
+
+.network-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+
+    &.online {
+        color: #22c55e;
+    }
+
+    &.offline {
+        color: #ef4444;
+    }
+}
+
+.section-description {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+}
+
+.offline-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(249, 115, 22, 0.5);
+    }
+
+    &.active {
+        background: rgba(249, 115, 22, 0.25);
+        border-color: #f97316;
+        color: #fdba74;
+
+        .toggle-icon {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .toggle-icon {
+        font-size: 18px;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.offline-info {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(249, 115, 22, 0.15);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #fdba74;
+    line-height: 1.4;
+}
+
+.section-divider {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

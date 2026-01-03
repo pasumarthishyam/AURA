@@ -7,6 +7,7 @@ import logging
 from typing import Optional
 from brain.llm_router import LLMRouter
 from brain.prompt import SYSTEM_PROMPT
+from brain.offline_prompt import OFFLINE_SYSTEM_PROMPT
 
 # =========================================================
 # LOGGING CONFIGURATION
@@ -85,8 +86,16 @@ class Brain:
         Decide the next action or STOP.
         """
 
+        # Select prompt based on offline mode
+        from core.offline_state import OfflineState
+        is_offline = OfflineState.is_offline()
+        system_prompt = OFFLINE_SYSTEM_PROMPT if is_offline else SYSTEM_PROMPT
+        
+        if is_offline:
+            logger.info("📴 OFFLINE MODE: Using offline-optimized prompt")
+        
         prompt = f"""
-{SYSTEM_PROMPT}
+{system_prompt}
 
 USER GOAL:
 {goal}
@@ -134,10 +143,19 @@ Respond with JSON only.
             )
         except json.JSONDecodeError as e:
             logger.error(f"JSON Parse Error: {e}\nRaw output was:\n{raw_output}")
-            # Emergency fallback (safe stop)
+            
+            # Try to extract the message using regex as fallback
+            extracted_message = self._extract_message_fallback(raw_output)
+            if extracted_message:
+                return {
+                    "type": "RESPONSE",
+                    "message": extracted_message
+                }
+            
+            # Final emergency fallback (safe stop)
             return {
                 "type": "STOP",
-                "message": f"Stopped due to invalid model output: {raw_output}"
+                "message": "I had trouble formatting my response. Please try again."
             }
 
         # --- Minimal validation ---
@@ -151,7 +169,7 @@ Respond with JSON only.
 
     def _clean_json(self, text: str) -> str:
         """
-        Removes markdown code fences if present.
+        Removes markdown code fences and fixes common JSON issues.
         """
         text = text.strip()
         # Remove ```json and ``` or just ```
@@ -164,3 +182,39 @@ Respond with JSON only.
             if text.endswith("```"):
                 text = text[:-3]
         return text.strip()
+    
+    def _extract_message_fallback(self, text: str) -> Optional[str]:
+        """
+        Attempts to extract message from malformed JSON response.
+        Used when JSON parsing fails but we can still find the message content.
+        """
+        import re
+        
+        # Try to find "message": "..." pattern
+        # Handle multi-line messages by using DOTALL
+        patterns = [
+            r'"message"\s*:\s*"((?:[^"\\]|\\.)*)"\s*}',  # Standard JSON
+            r'"message"\s*:\s*"(.+?)"(?:\s*}|\s*$)',      # Looser match
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text, re.DOTALL)
+            if match:
+                message = match.group(1)
+                # Unescape common escape sequences
+                message = message.replace('\\n', '\n')
+                message = message.replace('\\"', '"')
+                message = message.replace('\\\\', '\\')
+                if len(message) > 20:  # Sanity check - should be a real message
+                    return message.strip()
+        
+        # If JSON-style extraction failed, check if the LLM just wrote plain text
+        # (sometimes models ignore JSON format)
+        if not text.strip().startswith('{'):
+            # It's not JSON at all, treat the whole response as a message
+            clean_text = text.strip()
+            if len(clean_text) > 20 and '"type"' not in clean_text:
+                return clean_text
+        
+        return None
+

@@ -38,6 +38,8 @@ class StatusResponse(BaseModel):
     initialized: bool
     gpu: str
     llm_provider: Optional[str] = None
+    offline_mode: Optional[bool] = False
+    network_available: Optional[bool] = True
 
 
 class SetProviderRequest(BaseModel):
@@ -123,3 +125,37 @@ async def get_llm_status():
     """Get current LLM provider status and available providers."""
     result = agent_service.get_llm_status()
     return LLMStatusResponse(**result)
+
+
+# =========================================================
+# Offline Mode Endpoints
+# =========================================================
+
+class OfflineModeRequest(BaseModel):
+    enabled: bool
+
+
+class OfflineStatusResponse(BaseModel):
+    offline_mode: bool
+    manual_offline: bool
+    auto_detect: bool
+    network_available: bool
+
+
+@router.post("/offline/mode", response_model=OfflineStatusResponse)
+async def set_offline_mode(request: OfflineModeRequest):
+    """
+    Enable or disable manual offline mode.
+    When enabled, AURA works without internet using local LLM.
+    """
+    from core.offline_state import OfflineState
+    OfflineState.set_manual_offline(request.enabled)
+    return OfflineState.get_status()
+
+
+@router.get("/offline/status", response_model=OfflineStatusResponse)
+async def get_offline_status():
+    """Get current offline mode status including network availability."""
+    from core.offline_state import OfflineState
+    return OfflineState.get_status()
+
