@@ -1,0 +1,61 @@
+<aside class="sidebar">
+  <!-- Logo -->
+  <div class="sidebar-header">
+    <span class="logo-text">AURA</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    @for (item of navItems; track item.label) {
+    <button class="nav-item" [class.active]="item.active" (click)="onNavClick(item)">
+      <span class="nav-label">{{ item.label }}</span>
+    </button>
+    }
+  </nav>
+
+  <!-- Footer - Minimal Status Only -->
+  <div class="sidebar-footer">
+    <!-- ERROR DISPLAY - Visible when initialization fails -->
+    @if (initError()) {
+    <div class="init-error">
+      <div class="init-error-header">
+        <mat-icon>error</mat-icon>
+        <span>Initialization Failed</span>
+        <button class="error-close" (click)="dismissError()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <p class="init-error-message">{{ initError() }}</p>
+      <div class="init-error-hint">
+        <strong>How to fix:</strong>
+        <ol>
+          <li>Create a <code>.env</code> file in the project root</li>
+          <li>Add: <code>GOOGLE_API_KEY=your_key_here</code></li>
+          <li>Restart the backend server</li>
+        </ol>
+      </div>
+    </div>
+    }
+
+    <!-- Aesthetic Status Card -->
+    <div class="status-card" [class.online]="isInitialized()">
+      <div class="status-content">
+        <span class="status-indicator"></span>
+        <span class="status-label">{{ isInitialized() ? 'System Active' : 'System Offline' }}</span>
+      </div>
+    </div>
+
+    @if (!isInitialized()) {
+    <button class="btn btn-primary init-btn" (click)="initializeAgent()" [disabled]="isLoading()">
+      @if (isLoading()) {
+      <div class="loading-pulse">
+        <span></span><span></span><span></span>
+      </div>
+      Connecting...
+      } @else {
+      Initialize
+      }
+    </button>
+    }
+  </div>
+</aside>

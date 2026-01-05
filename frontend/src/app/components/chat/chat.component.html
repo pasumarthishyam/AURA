@@ -1,0 +1,74 @@
+<div class="chat-container">
+    <!-- Error Display (if any) -->
+    @if (error()) {
+    <app-error-display [error]="error()!" (dismiss)="clearError()">
+    </app-error-display>
+    }
+
+    <!-- Messages -->
+    <div class="messages-wrapper">
+        @if (messages().length === 0) {
+        <div class="empty-state">
+            <div class="empty-hero">
+                <div class="aura-logo">
+                    <span class="logo-glow"></span>
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" />
+                        <circle cx="32" cy="32" r="12" fill="currentColor" opacity="0.8" />
+                    </svg>
+                </div>
+                <h2>What can I help you with?</h2>
+                <p>Ask anything. I'm here to assist.</p>
+            </div>
+
+            <!-- Suggestion Chips -->
+            <div class="suggestions">
+                <button class="suggestion-chip" (click)="sendSuggestion('Explain quantum computing')">Explain quantum
+                    computing</button>
+                <button class="suggestion-chip" (click)="sendSuggestion('Write a Python script')">Write a Python
+                    script</button>
+                <button class="suggestion-chip" (click)="sendSuggestion('Brainstorm ideas')">Brainstorm ideas</button>
+            </div>
+        </div>
+        } @else {
+        @for (message of messages(); track message.id) {
+        <div class="message" [class.message-user]="message.role === 'user'"
+            [class.message-ai]="message.role === 'assistant'">
+            <div class="message-content">
+                <p class="message-text">
+                    <!-- Use displayContent for typewriter effect -->
+                    {{ message.displayContent || message.content }}
+                    <!-- Typing cursor -->
+                    @if (message.isStreaming) {
+                    <span class="typing-cursor"></span>
+                    }
+                </p>
+                @if (!message.isStreaming) {
+                <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+                }
+                @if (message.role === 'assistant' && !message.success && !message.isStreaming) {
+                <div class="message-status error">
+                    <mat-icon>error</mat-icon>
+                    <span>Task completed with issues</span>
+                </div>
+                }
+            </div>
+        </div>
+        }
+        }
+
+        <!-- Thinking Indicator -->
+        @if (isThinking()) {
+        <div class="message message-ai thinking">
+            <div class="message-content">
+                <div class="thinking-indicator">
+                    <div class="loading-pulse">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="thinking-text">Thinking...</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

@@ -95,3 +95,51 @@ class VoiceEngine:
             os.startfile(file_path)
         except Exception as e:
             print(f"Error playing audio: {e}")
+
+    def observe(self, action: dict, result, error: str = None) -> str:
+        """
+        Creates a textual observation from the action result.
+        Required by CoreAgentController.
+        Enhanced to guide the model toward proper task completion.
+        """
+        if error:
+            return f"Action failed with error: {error}"
+        
+        if result is None:
+            return "Action completed with no output."
+        
+        # Get action details for context-aware observation
+        tool = action.get("tool", "")
+        params = action.get("params", {})
+        
+        # Truncate long results
+        result_str = str(result)
+        if len(result_str) > 500:
+            result_str = result_str[:500] + "... (truncated)"
+        
+        # Special guidance for file operations
+        if tool == "WRITE_FILE":
+            path = params.get("path", "")
+            return (
+                f"✅ SUCCESS: File written at {path}\n"
+                f"NEXT STEP: Use STOP to complete the task with a confirmation message. "
+                f"Do NOT repeat the WRITE_FILE action!"
+            )
+        
+        if tool == "WRITE_AND_OPEN":
+            path = params.get("path", "")
+            return (
+                f"✅ SUCCESS: File written and opened in Notepad: {path}\n"
+                f"NEXT STEP: Use STOP to complete the task. The user can now see the file."
+            )
+        
+        if tool == "READ_FILE":
+            return f"File contents:\n{result_str}"
+        
+        if tool == "SHELL_EXECUTE":
+            return f"Command output:\n{result_str}"
+        
+        # Default observation
+        return f"Action completed. Result: {result_str}"
+
+

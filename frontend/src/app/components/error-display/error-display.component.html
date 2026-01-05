@@ -1,0 +1,39 @@
+<div class="error-container">
+    <div class="error-header">
+        <div class="error-title">
+            <mat-icon>error</mat-icon>
+            <span>Error</span>
+        </div>
+        <button class="btn-close" (click)="dismiss.emit()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <p class="error-message">{{ error.message }}</p>
+
+    @if (error.trace) {
+    <button class="trace-toggle" (click)="toggleTrace()">
+        <mat-icon>{{ showTrace() ? 'expand_less' : 'expand_more' }}</mat-icon>
+        {{ showTrace() ? 'Hide' : 'Show' }} Traceback
+    </button>
+
+    @if (showTrace()) {
+    <pre class="error-trace">{{ error.trace }}</pre>
+    }
+    }
+
+    <div class="error-actions">
+        <button (click)="copyError()">
+            <mat-icon>content_copy</mat-icon>
+            Copy
+        </button>
+        <button (click)="askGoogle()">
+            <mat-icon>search</mat-icon>
+            Ask Google
+        </button>
+        <button (click)="askChatGPT()">
+            <mat-icon>chat</mat-icon>
+            Ask ChatGPT
+        </button>
+    </div>
+</div>

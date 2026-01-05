@@ -1,0 +1,102 @@
+<!-- Settings Toggle Button - Clean Icon Only -->
+<button class="settings-toggle" (click)="toggle()" [class.active]="isOpen()">
+    <svg class="settings-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z"
+            stroke="currentColor" stroke-width="1.5" />
+        <path
+            d="M16.0667 12.3667C15.9445 12.6445 15.9044 12.9556 15.9522 13.2578C16 13.56 16.1333 13.8378 16.3333 14.0667L16.3917 14.125C16.5527 14.286 16.6803 14.4772 16.7673 14.6877C16.8543 14.8982 16.899 15.1239 16.899 15.3521C16.899 15.5802 16.8543 15.806 16.7673 16.0165C16.6803 16.227 16.5527 16.4182 16.3917 16.5792C16.2307 16.7402 16.0395 16.8678 15.829 16.9548C15.6185 17.0418 15.3927 17.0865 15.1646 17.0865C14.9364 17.0865 14.7107 17.0418 14.5002 16.9548C14.2897 16.8678 14.0985 16.7402 13.9375 16.5792L13.8792 16.5208C13.6503 16.3209 13.3725 16.1875 13.0703 16.1398C12.7681 16.092 12.457 16.1321 12.1792 16.2542C11.9066 16.3706 11.6748 16.5669 11.5147 16.8171C11.3546 17.0673 11.2735 17.3603 11.2833 17.6583V17.8333C11.2833 18.2917 11.1018 18.7313 10.7783 19.0548C10.4548 19.3783 10.0152 19.5598 9.55667 19.5598C9.09812 19.5598 8.65858 19.3783 8.33509 19.0548C8.0116 18.7313 7.83 18.2917 7.83 17.8333V17.7417C7.83275 17.4368 7.74295 17.1387 7.57206 16.891C7.40118 16.6433 7.15758 16.4578 6.875 16.3667C6.59722 16.2446 6.28611 16.2044 5.98389 16.2522C5.68167 16.3 5.40389 16.4334 5.175 16.6334L5.11667 16.6917C4.95565 16.8527 4.76443 16.9803 4.55394 17.0673C4.34345 17.1543 4.1177 17.199 3.88958 17.199C3.66147 17.199 3.43572 17.1543 3.22523 17.0673C3.01474 16.9803 2.82352 16.8527 2.6625 16.6917C2.50148 16.5307 2.37391 16.3395 2.2869 16.129C2.19989 15.9185 2.15518 15.6927 2.15518 15.4646C2.15518 15.2365 2.19989 15.0107 2.2869 14.8002C2.37391 14.5898 2.50148 14.3985 2.6625 14.2375L2.72083 14.1792C2.92083 13.9503 3.05417 13.6725 3.10194 13.3703C3.14972 13.0681 3.10956 12.757 2.9875 12.4792C2.87111 12.2066 2.67479 11.9748 2.42458 11.8147C2.17437 11.6546 1.88139 11.5735 1.58333 11.5833H1.40833C0.949787 11.5833 0.510253 11.4018 0.186764 11.0783C-0.136726 10.7548 -0.318329 10.3152 -0.318329 9.85667C-0.318329 9.39812 -0.136726 8.95858 0.186764 8.63509C0.510253 8.3116 0.949787 8.13 1.40833 8.13H1.5C1.80493 8.12725 2.10298 8.03745 2.35071 7.86656C2.59843 7.69568 2.78394 7.45208 2.875 7.16949C2.99706 6.89171 3.03722 6.58061 2.98944 6.27838C2.94167 5.97616 2.80833 5.69838 2.60833 5.46949L2.55 5.41116C2.38898 5.25014 2.26141 5.05892 2.1744 4.84843C2.08739 4.63794 2.04268 4.41219 2.04268 4.18407C2.04268 3.95596 2.08739 3.73021 2.1744 3.51972C2.26141 3.30923 2.38898 3.11801 2.55 2.95699C2.71102 2.79597 2.90224 2.6684 3.11273 2.58139C3.32322 2.49438 3.54897 2.44967 3.77708 2.44967C4.00519 2.44967 4.23095 2.49438 4.44144 2.58139C4.65193 2.6684 4.84314 2.79597 5.00417 2.95699L5.0625 3.01533C5.29139 3.21533 5.56917 3.34866 5.87139 3.39644C6.17361 3.44421 6.48472 3.40405 6.7625 3.28199H6.875C7.14761 3.1656 7.37938 2.96929 7.53948 2.71907C7.69957 2.46886 7.78067 2.17588 7.77083 1.87782V1.70282C7.77083 1.24428 7.95243 0.804742 8.27592 0.481253C8.59941 0.157764 9.03895 -0.0238397 9.4975 -0.0238397C9.95604 -0.0238397 10.3956 0.157764 10.7191 0.481253C11.0426 0.804742 11.2242 1.24428 11.2242 1.70282V1.79449C11.2143 2.09255 11.2954 2.38553 11.4555 2.63575C11.6156 2.88596 11.8474 3.08228 12.12 3.19866C12.3978 3.32072 12.7089 3.36088 13.0111 3.31311C13.3133 3.26533 13.5911 3.132 13.82 2.93199L13.8783 2.87366C14.0394 2.71264 14.2306 2.58507 14.4411 2.49806C14.6516 2.41105 14.8773 2.36634 15.1054 2.36634C15.3335 2.36634 15.5593 2.41105 15.7698 2.49806C15.9803 2.58507 16.1715 2.71264 16.3325 2.87366C16.4935 3.03468 16.6211 3.2259 16.7081 3.43639C16.7951 3.64688 16.8398 3.87263 16.8398 4.10074C16.8398 4.32886 16.7951 4.55461 16.7081 4.7651C16.6211 4.97559 16.4935 5.16681 16.3325 5.32783L16.2742 5.38616C16.0742 5.61505 15.9408 5.89283 15.8931 6.19505C15.8453 6.49727 15.8855 6.80838 16.0075 7.08616V7.19866C16.1239 7.47127 16.3202 7.70305 16.5704 7.86314C16.8207 8.02324 17.1136 8.10434 17.4117 8.09449H17.5867C18.0452 8.09449 18.4848 8.27609 18.8083 8.59958C19.1318 8.92307 19.3134 9.36261 19.3134 9.82115C19.3134 10.2797 19.1318 10.7192 18.8083 11.0427C18.4848 11.3662 18.0452 11.5478 17.5867 11.5478H17.495C17.197 11.558 16.904 11.6391 16.6538 11.7992C16.4036 11.9593 16.2073 12.1911 16.0909 12.4637L16.0667 12.3667Z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+</button>
+
+<!-- Settings Panel -->
+<div class="settings-panel" [class.open]="isOpen()">
+    <div class="panel-header">
+        <h3>Settings</h3>
+        <button class="close-btn" (click)="close()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="panel-content">
+        <!-- Status Message -->
+        @if (statusMessage()) {
+        <div class="status-message" [class.error]="statusMessage()?.startsWith('Error')">
+            {{ statusMessage() }}
+        </div>
+        }
+
+        <!-- Connection Mode Section -->
+        <div class="settings-section">
+            <div class="section-header">
+                <h4>Connection</h4>
+                <span class="connection-status" [class.online]="api.networkAvailable()">
+                    <span class="connection-dot"></span>
+                    {{ api.networkAvailable() ? 'Connected' : 'No Internet' }}
+                </span>
+            </div>
+
+            <div class="mode-toggle">
+                <button class="mode-option" [class.active]="!api.offlineMode()" [disabled]="isLoading()"
+                    (click)="api.offlineMode() && toggleOfflineMode()">
+                    <span class="mode-label">Online</span>
+                </button>
+                <button class="mode-option" [class.active]="api.offlineMode()" [disabled]="isLoading()"
+                    (click)="!api.offlineMode() && toggleOfflineMode()">
+                    <span class="mode-label">Offline</span>
+                </button>
+            </div>
+
+            @if (api.offlineMode()) {
+            <p class="mode-description">Using local AI. Works without internet.</p>
+            }
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- LLM Provider Section -->
+        <div class="settings-section">
+            <h4>Model</h4>
+            <div class="provider-list">
+                @for (provider of api.availableProviders(); track provider) {
+                <button class="provider-option" [class.selected]="provider === api.currentProvider()"
+                    [class.unhealthy]="providerHealth()[provider] === false" [disabled]="isLoading()"
+                    (click)="selectProvider(provider)">
+                    <span class="provider-info">
+                        <span class="provider-name">{{ getProviderLabel(provider) }}</span>
+                        <span class="provider-status">
+                            <span class="health-dot" [class.healthy]="providerHealth()[provider] === true"
+                                [class.unhealthy]="providerHealth()[provider] === false"
+                                [class.unknown]="providerHealth()[provider] === undefined"></span>
+                            {{ providerHealth()[provider] === true ? 'Available' :
+                            providerHealth()[provider] === false ? 'Unavailable' : 'Checking...' }}
+                        </span>
+                    </span>
+                    @if (provider === api.currentProvider()) {
+                    <svg class="check-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    }
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        @if (isLoading()) {
+        <div class="loading-overlay">
+            <span class="spinner"></span>
+        </div>
+        }
+    </div>
+</div>
+
+<!-- Backdrop -->
+@if (isOpen()) {
+<div class="backdrop" (click)="close()"></div>
+}

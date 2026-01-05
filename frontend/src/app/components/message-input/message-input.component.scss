@@ -1,0 +1,136 @@
+.input-container {
+    padding: var(--space-lg) var(--space-xl);
+    background: linear-gradient(to top, var(--bg-base) 0%, transparent 100%);
+
+    &.disabled {
+        opacity: 0.6;
+    }
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-lg);
+
+    // Glassmorphism styling
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-input);
+    transition: all var(--transition-normal);
+
+    &:focus-within {
+        border-color: rgba(124, 58, 237, 0.3);
+        box-shadow:
+            var(--shadow-input),
+            0 0 20px var(--accent-glow);
+    }
+}
+
+.message-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: var(--text-base);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    padding: var(--space-sm) 0;
+    line-height: 1.5;
+
+    &::placeholder {
+        color: var(--text-tertiary);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+
+// Microphone Button - Minimal & Clean
+.mic-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+
+    svg {
+        transition: all var(--transition-fast);
+    }
+
+    &:hover:not(:disabled) {
+        color: var(--text-secondary);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.95);
+    }
+
+    &:disabled {
+        color: var(--text-disabled);
+        cursor: not-allowed;
+    }
+}
+
+.send-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover:not(:disabled) {
+        background: var(--accent-primary-hover);
+        transform: scale(1.05);
+        box-shadow: var(--shadow-glow);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        background: var(--bg-hover);
+        color: var(--text-tertiary);
+        cursor: not-allowed;
+    }
+}
+
+.loading-pulse.small {
+    gap: 2px;
+
+    span {
+        width: 4px;
+        height: 4px;
+    }
+}
+
+// Hide the input hint for cleaner look
+.input-hint {
+    display: none;
+}
